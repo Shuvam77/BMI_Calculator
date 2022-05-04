@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Test BMI Index Calculator</h1>
+
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="submit">
+</form>
+
+{% for data in track_list %}
+    {{data.user}} {{data.bmi}} {{data.class}} {{data.trackDate}} {{data.status}}
+    <br>
+{% endfor %}
+{% endblock %}
