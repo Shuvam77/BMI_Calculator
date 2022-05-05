@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import redirect, render
 from .models import Bmi
 from django.views.generic import CreateView
@@ -19,6 +20,7 @@ class indexView(CreateView):
     #     return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
+        context={}
         if request.method == "POST":
             weight_metric = request.POST.get("weightMetric")
             weight_imperial = request.POST.get("weightImperial")
@@ -31,13 +33,15 @@ class indexView(CreateView):
                 height = (float(request.POST.get("feet"))*30.48) + (float(request.POST.get("inches"))*2.54)
             bmi=round(((weight/(height**2))*100), 3)
             user = request.user
-            Bmi.objects.create(
+            Bmi_obj = Bmi.objects.create(
                 height=height,
                 weight=weight,
                 bmi=bmi,
                 user=user
             )
-            return redirect('index-view')
+            context['bmi']=Bmi_obj
+            # return redirect('index-view')
+        return render (request, 'bmi/index.html', context)
 
 
 
@@ -51,6 +55,7 @@ class indexView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['page'] = 'index'
         state = Bmi.objects.all()
         context['track_list'] = state
         return context

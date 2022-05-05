@@ -48,7 +48,7 @@
                                   <input type="text" name="inches" placeholder="inches" class="form-control">
                                 </div>
                               </div>
-                            <input type="submit" class="btn btn-primary" value="Calculate">
+                            <input type="submit" id="submit" name="submit" class="btn btn-primary" value="Calculate">
                         </form>
                     </div>
                   </div>
@@ -58,10 +58,13 @@
     </div>
 </div>
 
+
+
 <div class="container">
+    {% if page == "index"  %}
     <div class="table-row">
         <div class="col-md-6 col-sm-12 col-xs-12">
-            <table style="width:100%">
+            <table style="width:100%" border="1px solid">
                 <tr>
                   <td>User</td>
                   <td>BMI</td>
@@ -71,7 +74,7 @@
                 {% for data in track_list %}
                 <tr>
                   <td>{{data.user}}</td>
-                  <td>{{data.bmi}}</td>
+                  <td>{{data.bmi}} kg/m²</td>
                   <td>{{data.status}}</td>
                   <td>{{data.trackDate}}</td>
                 </tr>
@@ -79,6 +82,66 @@
               </table>
         </div>
     </div>
+    {% else %}
+    <div>
+        <div class="info">
+            <table style="width:100%" border="1px solid">
+                <tr>
+                  <td>User</td>
+                  <td>Category</td>
+                  <td>BMI</td>
+                </tr>
+                <tr>
+                  <td>{{bmi.user}}</td>
+                  <td>{{bmi.status}} </td>
+                  <td id="bmi" name="bmi">{{bmi.bmi}}</td>
+                </tr>
+            </table>              
+        </div>
+        <div id='myDiv'>
+            <!-- Plotly chart will be drawn inside this DIV -->
+        </div>
+    </div>
+    {% endif %}
 </div>
+
+
+<script>
+    var bmi = document.getElementById("bmi").innerHTML;
+    console.log(bmi);
+    var data = [
+  {
+    domain: { x: [0, 1], y: [0, 1] },
+    value: bmi,
+    title: { text: "BMI INDICATOR" },
+    type: "indicator",
+    mode: "gauge+number+delta",
+    // delta: { reference: 380 },
+    gauge: {
+      axis: { range: [null, 0.50] },
+      steps: [
+        { range: [0, 0.16], color: "red" },
+        { range: [0.16, 0.18], color: "lightred" },
+        { range: [0.16, 0.18], colors: "pink" },
+        { range: [0.18, 0.25], color: "lightgreen" },
+        { range: [0.25, 0.30], color: "yellow" },
+        { range: [0.30, 0.35], color: "orange" },
+        { range: [0.35, 0.40], color: "red" },
+        { range: [0.40, 0.50], color: "darkred" }
+
+      ],
+      threshold: {
+        line: { color: "red", width: 4 },
+        thickness: 0.75,
+        value: 0.50
+      }
+    }
+  }
+];
+
+var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+Plotly.newPlot('myDiv', data, layout);
+
+</script>
 
 {% endblock %}
