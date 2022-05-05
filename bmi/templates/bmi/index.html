@@ -5,14 +5,80 @@
 <h1>Test BMI Index Calculator</h1>
 
 
-<form method="post">
+<!-- <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="submit">
-</form>
+</form> -->
 
-{% for data in track_list %}
-    {{data.user}} {{data.bmi}} {{data.class}} {{data.trackDate}} {{data.status}}
-    <br>
-{% endfor %}
+<div class="container">
+    <div class="form-row">
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="tab-bmi">
+                <h3>BMI Calculator</h3>
+                <div class="tab">
+                    <button  class="tablinks" onclick="openUnit(event, 'metric')">Metric</button>
+                    <button  class="tablinks" onclick="openUnit(event, 'imperial')">Imperial</button>
+                </div>
+                    <div class="tabcontent" id="metric">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label for="">Weight: </label>
+                                <input type="text" id="" name="weightMetric" class="form-control" required placeholder="kg">
+                            </div>
+                            <div class="col-12">
+                                <label for="">Height: </label>
+                                <input type="text" name="heightMetric" class="form-control" required placeholder="centi-meters">
+                            </div>
+                            <input type="submit" class="btn btn-primary" value="Calculate">
+                        </form>
+                    </div>
+                    <div class="tabcontent" id="imperial">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label for="">Weight: </label>
+                                <input type="text" name="weightImperial" class="form-control" required placeholder="lbs">
+                            </div>
+                            <div class="col-12">
+                                <label for="">Height: </label>
+                                <div class="input-group">
+                                  <input type="text" name="feet" placeholder="feet" class="form-control">
+                                  <input type="text" name="inches" placeholder="inches" class="form-control">
+                                </div>
+                              </div>
+                            <input type="submit" class="btn btn-primary" value="Calculate">
+                        </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="table-row">
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <table style="width:100%">
+                <tr>
+                  <td>User</td>
+                  <td>BMI</td>
+                  <td>Category</td>
+                  <td>Date</td>
+                </tr>
+                {% for data in track_list %}
+                <tr>
+                  <td>{{data.user}}</td>
+                  <td>{{data.bmi}}</td>
+                  <td>{{data.status}}</td>
+                  <td>{{data.trackDate}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
